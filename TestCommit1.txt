@@ -1,2 +1,12 @@
 Franklin Qiu
 Sanjay Venkat
+
+use PuTTY to login to 
+sftp.itd.umich.edu
+
+
+
+folder is located under
+
+you might need to navigate out a bit to find it. (cd ../)
+/afs/umich.edu/user/f/s/fsqiu/Public/html/index.html
