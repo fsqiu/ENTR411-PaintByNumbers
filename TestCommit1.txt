@@ -10,3 +10,6 @@ folder is located under
 
 you might need to navigate out a bit to find it. (cd ../)
 /afs/umich.edu/user/f/s/fsqiu/Public/html/index.html
+
+you will need to learn to use vim in order to edit it without any problems or you can use github
+
