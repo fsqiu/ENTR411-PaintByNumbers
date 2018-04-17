@@ -28,9 +28,9 @@ Z = img.reshape((-1,3))
 Z = np.float32(Z)
 
 # define criteria, number of clusters(K) and apply kmeans()
-criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
-K = 3
-ret,label,center=cv2.kmeans(Z,K,None,criteria,10,cv2.KMEANS_RANDOM_CENTERS)
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 50, 1.0)
+K = 7
+ret,label,center=cv2.kmeans(Z,K,None,criteria,50,cv2.KMEANS_RANDOM_CENTERS)
 
 # Now convert back into uint8, and make original image
 center = np.uint8(center)
@@ -43,51 +43,24 @@ if meansIMG.mode != 'RGB':
     meansIMG = meansIMG.convert('RGB')
 meansIMG.save(path)
 
+
+path = r"C:\Users\Franklin Qiu\Documents\Ann Arbor Means3.PNG"
 image = cv2.imread(path)
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
 blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)[1]
-cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
+thresh = cv2.threshold(blurred, 50, 255, cv2.THRESH_BINARY)[1]
+th = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 101, 1)
+
+cnts = cv2.findContours(th.copy(), cv2.RETR_LIST,
 	cv2.CHAIN_APPROX_SIMPLE)
 cnts = cnts[0] if imutils.is_cv2() else cnts[1]
+imga = image
+imga[:,:,:] = 255
+cv2.drawContours(imga, cnts, -1, (0, 0, 0), 1)
 
-for c in cnts:
-	# compute the center of the contour, then detect the name of the
-	# shape using only the contour
-	M = cv2.moments(c)
-	cX = int((M["m10"] / (M["m00"]+0.0001)))
-	cY = int((M["m01"] / (M["m00"]+0.0001)))
- 
-	# then draw the contours and the name of the shape on the image
-	cv2.drawContours(image, [c], -1, (0, 255, 0), 2)
-	
-path = r"C:\Users\Franklin Qiu\Documents\Ann Arbor Means5.PNG"
-meansIMG = Image.fromarray(image)
-if meansIMG.mode != 'RGB':
-    meansIMG = meansIMG.convert('RGB')
-meansIMG.save(path)
-
-path = r"C:\Users\Franklin Qiu\Documents\Ann Arbor Grey.PNG"
-image = cv2.imread(path)
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)[1]
-cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
-	cv2.CHAIN_APPROX_SIMPLE)
-cnts = cnts[0] if imutils.is_cv2() else cnts[1]
-
-for c in cnts:
-	# compute the center of the contour, then detect the name of the
-	# shape using only the contour
-	M = cv2.moments(c)
-	cX = int((M["m10"] / (M["m00"]+0.0001)))
-	cY = int((M["m01"] / (M["m00"]+0.0001)))
- 
-	# then draw the contours and the name of the shape on the image
-	cv2.drawContours(image, [c], -1, (0, 255, 0), 2)
-	
 path = r"C:\Users\Franklin Qiu\Documents\Ann Arbor Means6.PNG"
-meansIMG = Image.fromarray(image)
+meansIMG = Image.fromarray(imga)
 if meansIMG.mode != 'RGB':
     meansIMG = meansIMG.convert('RGB')
 meansIMG.save(path)
